@@ -1,0 +1,111 @@
+<!doctype html>
+<meta charset=utf-8>
+<html>
+<head>
+    <style>
+        body {
+            background-image: url(/public/images/paper.png);
+            margin: 0;
+            text-align: center;
+        }
+        table{
+            width: 210px;
+            height: 210px;
+            border-collapse: collapse;
+            text-align: center;
+            margin-left:auto;
+            margin-right:auto;
+        }
+        .case{
+            font-size: 30px;
+            font-weight: bold;
+        }
+        td{
+            width:  70px;
+            height: 70px;
+        }
+        td, tr{
+            margin: 0;
+            padding: 0;
+        }
+        button{
+            height: 70px;
+            width: 70px;
+            border: 0;
+            background: none;
+            box-shadow: none;
+            border-radius: 0;
+        }
+        .bottom{
+            border-bottom: black groove 3px;
+        }
+        .top{
+            border-top: black groove 3px;
+        }
+        .left{
+            border-left: black groove 3px;
+        }
+        .right{
+            border-right: black groove 3px;
+        }
+    </style>
+    <script src="/public/js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript">
+        let color = "red";
+        function play(x,y) {
+            $.get('/play?x=' + x + "&y=" + y, function (data) {
+                let button = document.getElementById(x+""+y);
+                color = color==="red" ? "blue" : "red";
+                button.style.color=color;
+                button.disabled = true;
+                button.innerText=data;
+                if (data.length > 3){
+                    window.location.href('/res');
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+<div>
+    <img height="70px" src="/public/images/game.png">
+</div>
+<div>
+    <table>
+        <tr>
+            <td class="bottom right">
+                <button id="00" class="case" onclick="play(0,0)"></button>
+            </td>
+            <td class="bottom left right">
+                <button id="01" class="case" onclick="play(0,1)"></button>
+            </td>
+            <td class="bottom left">
+                <button id="02" class="case" onclick="play(0,2)"></button>
+            </td>
+        </tr>
+        <tr>
+            <td class="top bottom right">
+                <button id="10" class="case" onclick="play(1,0)"></button>
+            </td>
+            <td class="top bottom left right">
+                <button id="11" class="case" onclick="play(1,1)"></button>
+            </td>
+            <td class="top bottom left">
+                <button id="12" class="case" onclick="play(1,2)"></button>
+            </td>
+        </tr>
+        <tr>
+            <td class="top right">
+                <button id="20" class="case" onclick="play(2,0)"></button>
+            </td>
+            <td class="top left right">
+                <button id="21" class="case" onclick="play(2,1)"></button>
+            </td>
+            <td class="top left">
+                <button id="22" class="case" onclick="play(2,2)"></button>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>
