@@ -12,9 +12,8 @@ ___The goal is to develop a TicTacToe Game in Golang___
 
 ___Specification:___
 
- - Back:  `GoLang`
+ - Back:  `GoLang`  [![Golang](https://img.icons8.com/color/60/000000/golang.png)](https://golang.org/)  
  - Front: `HTML` (Using webview)
- [![Golang](https://img.icons8.com/color/60/000000/golang.png)](https://golang.org/)  
 
 ***
 
