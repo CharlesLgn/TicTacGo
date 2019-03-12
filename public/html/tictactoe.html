@@ -1,5 +1,4 @@
 <!doctype html>
-<meta charset=utf-8>
 <html>
 <head>
     <style>
@@ -36,18 +35,10 @@
     </style>
     <script src="/public/js/jquery-3.3.1.min.js"></script>
     <script type="text/javascript">
-        let j1 = 0;
-        let j2 = 0;
-
         function play(x, y) {
             $.get('/play?x=' + x + "&y=" + y, function (data) {
                 let button = document.getElementById(x + "" + y);
                 if (data.length > 1) {
-                    if (data.charAt(1) === "1") {
-                        j1++;
-                    } else if (data.charAt(1) === "2") {
-                        j2++;
-                    }
                     start();
                 } else {
                     button.style.color = data === "X" ? "red" : "blue";
@@ -56,13 +47,11 @@
                 }
             });
         }
-
         function score() {
             $.get('/score', function (data) {
                 document.getElementById("res").innerHTML = data;
             });
         }
-
         function start() {
             $.get('/restart', function () {
                 for (let i = 0; i < 3; i++) {
