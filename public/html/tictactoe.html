@@ -57,6 +57,12 @@
             });
         }
 
+        function score() {
+            $.get('/score', function (data) {
+                document.getElementById("res").innerHTML = data;
+            });
+        }
+
         function start() {
             $.get('/restart', function () {
                 for (let i = 0; i < 3; i++) {
@@ -66,7 +72,7 @@
                         button.disabled = false;
                     }
                 }
-                document.getElementById("res").innerHTML = "<p>player 1 : " + j1 + "</p><p>player 2 : " + j2 + "</p>";
+                score();
             });
         }
     </script>
