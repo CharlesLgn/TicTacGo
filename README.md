@@ -27,17 +27,14 @@ build:
 <table>
     <tr>
         <td>
-            <img width="100px" src="./content/screen01.PNG">
+            <img width="200px" src="./content/screen01.PNG">
         </td>
         <td>
-            <img width="100px" src="./content/screen02.PNG">
-        </td>
-        <td>
-            <img width="100px" src="./content/screen03.PNG">
+            <img width="200px" src="./content/screen02.PNG">
         </td>
     </tr>
 </table>
 
 ***
 
-Thanks to Serge Zaitsev for his amazing [webview](https://github.com/zserge/webview) package!
+Thanks to Serge Zaitsev for his [webview](https://github.com/zserge/webview) package!

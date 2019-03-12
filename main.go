@@ -15,9 +15,9 @@ import (
 var dir string                           // current directory
 var windowWidth, windowHeight = 400, 300 // width and height of the window
 var game [3][3]int						 // game bord
-var player = 0							 // current player turn
-var turn = 0
-var res = ""							 // the winner
+var player int							 // current player turn
+var turn int
+var res	string						 // the winner
 
 func init() {
 	// getting the current directory to access resources
@@ -26,6 +26,14 @@ func init() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	for i := 0; i < 3; i++ {
+		for j := 0; j < 3; j++ {
+			game[i][j] = -1
+		}
+	}
+	res = ""
+	turn = 0
+	player = 1
 }
 
 // main function
@@ -48,9 +56,9 @@ func app(prefixChannel chan string) {
 	mux := http.NewServeMux()
 	mux.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir(dir+"/public"))))
 	mux.HandleFunc("/start", start)
+	mux.HandleFunc("/restart", restart)
 	mux.HandleFunc("/play", play)
 	mux.HandleFunc("/victory", getVictory)
-	mux.HandleFunc("/res", victory)
 
 	// get an ephemeral port, so we're guaranteed not to conflict with anything else
 	listener, err := net.Listen("tcp", "127.0.0.1:0")
@@ -68,32 +76,36 @@ func app(prefixChannel chan string) {
 }
 
 func play(writer http.ResponseWriter, request *http.Request) {
+	if turn == 0 {
+		for i := 0; i < 3; i++ {
+			for j := 0; j < 3; j++ {
+				game[i][j] = -1
+			}
+		}
+	}
 	x, _ := strconv.Atoi(request.FormValue("x"))
 	y, _ := strconv.Atoi(request.FormValue("y"))
 	game[x][y] = player
 	str := "X"
 	turn++
-	if game[x][y] == 0 {
+	if game[x][y] == 1 {
 		str = "O"
 	}
-	winner := player+1
 	for i := 0; i < 3; i++ {
 		if game[i][0] == game[i][1] && game[i][0] == game[i][2] && game[i][0] != -1 {
-			res = "Winner : Player " + strconv.Itoa(winner)
+			res = strconv.Itoa(player)
 		}
 		if game[0][i] == game[1][i] && game[0][i] == game[2][i] && game[0][i] != -1 {
-			res = "Winner : Player " + strconv.Itoa(winner)
+			res = strconv.Itoa(player)
 		}
 	}
-	if game[0][0] == game[1][1] && game[0][0] == game[2][2] && game[0][0] != -1 {
-		res = "Winner : Player " + strconv.Itoa(winner)
-	} else if game[0][2] == game[1][1] && game[0][2] == game[2][0] && game[0][2] != -1 {
-		res = "Winner : Player " + strconv.Itoa(winner)
+	if (game[0][0] == game[1][1] && game[0][0] == game[2][2] && game[0][0] != -1) || (game[0][2] == game[1][1] && game[0][2] == game[2][0] && game[0][2] != -1){
+		res = strconv.Itoa(player)
 	} else if turn == 9 {
 		res = "Draw"
 	}
 	str += res
-	player = (player + 1) % 2
+	player = player%2 +1
 	writer.Header().Set("Cache-Control", "no-cache")
 	_, _ = writer.Write([]byte(str))
 }
@@ -103,22 +115,25 @@ func getVictory(writer http.ResponseWriter, _ *http.Request) {
 	_, _ = writer.Write([]byte(res))
 }
 
-func victory(writer http.ResponseWriter, _ *http.Request) {
-	t, _ := template.ParseFiles(dir + "/public/html/victory.html")
-	_ = t.Execute(writer, nil)
+// start the game
+func start(w http.ResponseWriter, r *http.Request) {
+	restart(w, r)
+	t, _ := template.ParseFiles(dir + "/public/html/tictactoe.html")
+	_ = t.Execute(w, nil)
 }
 
 // start the game
-func start(w http.ResponseWriter, _ *http.Request) {
-	for i := 0; i < 3; i++ {
-		for j := 0; j < 3; j++ {
-			game[i][j] = -1
+func restart(w http.ResponseWriter, _ *http.Request) {
+	if res != "" {
+		for i := 0; i < 3; i++ {
+			for j := 0; j < 3; j++ {
+				game[i][j] = -1
+			}
 		}
+		res = ""
+		turn = 0
+		player = 1
+		w.Header().Set("Cache-Control", "no-cache")
 	}
-	res = ""
-	turn = 0
-	player = 0
-	t, _ := template.ParseFiles(dir + "/public/html/tictactoe.html")
-	// start generating frames in a new goroutine
-	_ = t.Execute(w, nil)
 }
+

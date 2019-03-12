@@ -5,107 +5,97 @@
     <style>
         body {
             background-image: url(/public/images/paper.png);
+            text-align: center;
+            font-size: 15px;
             margin: 0;
-            text-align: center;
         }
-        table{
-            width: 210px;
-            height: 210px;
+        table {
             border-collapse: collapse;
-            text-align: center;
-            margin-left:auto;
-            margin-right:auto;
+            margin: auto;
         }
-        .case{
+        #game td {
+            width: 70px;
+            height: 70px;
             font-size: 30px;
             font-weight: bold;
         }
-        td{
-            width:  70px;
-            height: 70px;
+        #res {
+            position: absolute;
+            min-width: 70px;
+            top: 100px;
+            right: 10px;
         }
-        td, tr{
-            margin: 0;
-            padding: 0;
-        }
-        button{
-            height: 70px;
-            width: 70px;
-            border: 0;
-            background: none;
-            box-shadow: none;
-            border-radius: 0;
-        }
-        .bottom{
+        #game tr:nth-child(even) {
+            border-top: black groove 3px;
             border-bottom: black groove 3px;
         }
-        .top{
-            border-top: black groove 3px;
-        }
-        .left{
+        #game td:nth-child(even) {
             border-left: black groove 3px;
-        }
-        .right{
             border-right: black groove 3px;
         }
     </style>
     <script src="/public/js/jquery-3.3.1.min.js"></script>
     <script type="text/javascript">
-        let color = "red";
-        function play(x,y) {
+        let j1 = 0;
+        let j2 = 0;
+
+        function play(x, y) {
             $.get('/play?x=' + x + "&y=" + y, function (data) {
-                let button = document.getElementById(x+""+y);
-                color = color==="red" ? "blue" : "red";
-                button.style.color=color;
-                button.disabled = true;
-                button.innerText=data;
-                if (data.length > 3){
-                    window.location.href('/res');
+                let button = document.getElementById(x + "" + y);
+                if (data.length > 1) {
+                    if (data.charAt(1) === "1") {
+                        j1++;
+                    } else if (data.charAt(1) === "2") {
+                        j2++;
+                    }
+                    start();
+                } else {
+                    button.style.color = data === "X" ? "red" : "blue";
+                    button.disabled = true;
+                    button.innerText = data;
                 }
+            });
+        }
+
+        function start() {
+            $.get('/restart', function () {
+                for (let i = 0; i < 3; i++) {
+                    for (let j = 0; j < 3; j++) {
+                        let button = document.getElementById(i + "" + j);
+                        button.innerText = "";
+                        button.disabled = false;
+                    }
+                }
+                document.getElementById("res").innerHTML = "<p>player 1 : " + j1 + "</p><p>player 2 : " + j2 + "</p>";
             });
         }
     </script>
 </head>
 <body>
-<div>
-    <img height="70px" src="/public/images/game.png">
-</div>
-<div>
-    <table>
-        <tr>
-            <td class="bottom right">
-                <button id="00" class="case" onclick="play(0,0)"></button>
-            </td>
-            <td class="bottom left right">
-                <button id="01" class="case" onclick="play(0,1)"></button>
-            </td>
-            <td class="bottom left">
-                <button id="02" class="case" onclick="play(0,2)"></button>
-            </td>
-        </tr>
-        <tr>
-            <td class="top bottom right">
-                <button id="10" class="case" onclick="play(1,0)"></button>
-            </td>
-            <td class="top bottom left right">
-                <button id="11" class="case" onclick="play(1,1)"></button>
-            </td>
-            <td class="top bottom left">
-                <button id="12" class="case" onclick="play(1,2)"></button>
-            </td>
-        </tr>
-        <tr>
-            <td class="top right">
-                <button id="20" class="case" onclick="play(2,0)"></button>
-            </td>
-            <td class="top left right">
-                <button id="21" class="case" onclick="play(2,1)"></button>
-            </td>
-            <td class="top left">
-                <button id="22" class="case" onclick="play(2,2)"></button>
-            </td>
-        </tr>
-    </table>
-</div>
+<img height="82" src="/public/images/game.png" alt="tittle">
+<table>
+    <tr>
+        <td>
+            <table id="game">
+                <tr>
+                    <td id="00" onclick="play(0,0)"></td>
+                    <td id="01" onclick="play(0,1)"></td>
+                    <td id="02" onclick="play(0,2)"></td>
+                </tr>
+                <tr>
+                    <td id="10" onclick="play(1,0)"></td>
+                    <td id="11" onclick="play(1,1)"></td>
+                    <td id="12" onclick="play(1,2)"></td>
+                </tr>
+                <tr>
+                    <td id="20" onclick="play(2,0)"></td>
+                    <td id="21" onclick="play(2,1)"></td>
+                    <td id="22" onclick="play(2,2)"></td>
+                </tr>
+            </table>
+        </td>
+        <td id="res"></td>
+    </tr>
+</table>
 </body>
 </html>
