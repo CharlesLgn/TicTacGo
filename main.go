@@ -2,7 +2,6 @@ package main
 
 import (
 	"github.com/zserge/webview"
-	"html/template"
 	"log"
 	"net"
 	"net/http"
@@ -51,7 +50,7 @@ func main() {
 func app(prefixChannel chan string) {
 	mux := http.NewServeMux()
 	mux.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir(dir+"/public"))))
-	mux.HandleFunc("/start", start)
+	mux.HandleFunc("/start", createGrid)
 	mux.HandleFunc("/restart", restart)
 	mux.HandleFunc("/play", play)
 	mux.HandleFunc("/victory", getVictory)
@@ -64,19 +63,33 @@ func app(prefixChannel chan string) {
 	}
 	portAddress := listener.Addr().String()
 	prefixChannel <- "http://" + portAddress
-	listener.Close()
+	_ = listener.Close()
 	server := &http.Server{
 		Addr:    portAddress,
 		Handler: mux,
 	}
-	server.ListenAndServe()
+	_ = server.ListenAndServe()
 }
 
 // start the game
-func start(w http.ResponseWriter, r *http.Request) {
+func createGrid(w http.ResponseWriter, r *http.Request) {
+	str := "<table><tr><td><table id=\"game\"><tr>" +
+			"<td id=\"00\" onclick=\"play(0,0)\"></td>" +
+			"<td id=\"01\" onclick=\"play(0,1)\"></td>" +
+			"<td id=\"02\" onclick=\"play(0,2)\"></td>" +
+		"</tr><tr>"+
+			"<td id=\"10\" onclick=\"play(1,0)\"></td>" +
+			"<td id=\"11\" onclick=\"play(1,1)\"></td>" +
+			"<td id=\"12\" onclick=\"play(1,2)\"></td>" +
+		"</tr><tr>" +
+			"<td id=\"20\" onclick=\"play(2,0)\"></td>" +
+			"<td id=\"21\" onclick=\"play(2,1)\"></td>" +
+			"<td id=\"22\" onclick=\"play(2,2)\"></td>" +
+		"</tr></table></td>"+
+		"<td id=\"res\"></td>"+
+		"</tr></table>"
 	restart(w, r)
-	t, _ := template.ParseFiles(dir + "/public/html/tictactoe.html")
-	_ = t.Execute(w, nil)
+	_, _ = w.Write([]byte(str))
 }
 
 // start the game

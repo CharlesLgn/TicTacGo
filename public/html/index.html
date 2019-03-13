@@ -4,18 +4,14 @@
 <head>
     <link rel="stylesheet" href="/public/css/style.css">
     <script src="/public/js/jquery-3.3.1.min.js"></script>
-    <script type="text/javascript">
-        function start() {
-            window.location.href = "/start";
-        }
-    </script>
+    <script type="text/javascript" src="/public/js/game-call.js"></script>
 </head>
 <body>
 <div>
     <img src="/public/images/game.png">
 </div>
-<div>
-    <button onclick="start()">Start</button>
+<div id = "main">
+    <button onclick="createGrid()">Start</button>
 </div>
 </body>
 </html>
