@@ -38,4 +38,5 @@ build:
 
 ***
 
-Thanks to Serge Zaitsev for his [webview](https://github.com/zserge/webview) package!
+Nota Bene : This project is a training to try some feature in Go and not be performant  
+(ex : generate the title in go instead of display directly the picture on the webView)
