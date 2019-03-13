@@ -8,11 +8,12 @@ table {
     border-collapse: collapse;
     margin: auto;
 }
-#game td {
+#game td, #game tr {
     width: 70px;
     height: 70px;
     font-size: 30px;
     font-weight: bold;
+    border: black 3px;
 }
 #res {
     position: absolute;
@@ -21,12 +22,10 @@ table {
     right: 10px;
 }
 #game tr:nth-child(even) {
-    border-top: black groove 3px;
-    border-bottom: black groove 3px;
+    border-style: groove none groove none;
 }
 #game td:nth-child(even) {
-    border-left: black groove 3px;
-    border-right: black groove 3px;
+    border-style: none groove none groove;
 }
 button{
     height: 30px;
@@ -34,7 +33,6 @@ button{
     border: 0;
     background: none;
     box-shadow: none;
-    border-radius: 0;
     font-size: 25px;
 }
 button:hover{

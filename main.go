@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 )
 
+var title string                         // title frames
 var dir string                           // current directory
 var windowWidth, windowHeight = 400, 300 // width and height of the window
 
@@ -19,6 +20,7 @@ func init() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	titlePicture = getImage(dir + "/public/images/game.png")
 	for i := 0; i < 3; i++ {
 		for j := 0; j < 3; j++ {
 			game[i][j] = -1
@@ -37,6 +39,7 @@ func main() {
 	prefixChannel := make(chan string)
 	// run the web server in a separate goroutine
 	go app(prefixChannel)
+	go generateTittle()
 	prefix := <-prefixChannel
 	// create a web view
 	err := webview.Open("TicTacGo", prefix+"/public/html/index.html",
@@ -50,6 +53,7 @@ func main() {
 func app(prefixChannel chan string) {
 	mux := http.NewServeMux()
 	mux.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir(dir+"/public"))))
+	mux.HandleFunc("/title", getTitleImage)
 	mux.HandleFunc("/start", createGrid)
 	mux.HandleFunc("/restart", restart)
 	mux.HandleFunc("/play", play)
@@ -111,4 +115,3 @@ func restart(w http.ResponseWriter, _ *http.Request) {
 		w.Header().Set("Cache-Control", "no-cache")
 	}
 }
-

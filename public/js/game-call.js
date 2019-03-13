@@ -33,3 +33,7 @@ function createGrid() {
         document.getElementById("main").innerHTML = data;
     });
 }
+
+$.get('/title', function (data) {
+    $('#image').attr('src', data);
+});
