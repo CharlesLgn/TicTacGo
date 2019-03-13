@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+    <link rel="stylesheet" href="/public/css/style.css">
+    <script src="/public/js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="/public/js/game-call.js"></script>
+</head>
+<body>
+<img height="82" src="/public/images/game.png" alt="tittle">
+<table>
+    <tr>
+        <td>
+            <table id="game">
+                <tr>
+                    <td id="00" onclick="play(0,0)"></td>
+                    <td id="01" onclick="play(0,1)"></td>
+                    <td id="02" onclick="play(0,2)"></td>
+                </tr>
+                <tr>
+                    <td id="10" onclick="play(1,0)"></td>
+                    <td id="11" onclick="play(1,1)"></td>
+                    <td id="12" onclick="play(1,2)"></td>
+                </tr>
+                <tr>
+                    <td id="20" onclick="play(2,0)"></td>
+                    <td id="21" onclick="play(2,1)"></td>
+                    <td id="22" onclick="play(2,2)"></td>
+                </tr>
+            </table>
+        </td>
+        <td id="res"></td>
+    </tr>
+</table>
+</body>
+</html>
