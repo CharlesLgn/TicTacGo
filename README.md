@@ -19,7 +19,8 @@ ___Specification:___
 
 ___run the project:___  
 get librarie for front:  
-`go get github.com/zserge/webview`
+`go get github.com/zserge/webview`  
+`go get github.com/disintegration/gift`  
 
 build:  
 `go build -ldflags="-H windowsgui" -o TicTacGo.exe`
