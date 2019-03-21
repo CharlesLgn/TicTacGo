@@ -1,14 +1,11 @@
-# keep this the first line in the file
-*	text=auto
-
 ###############################################################################
 #
 # ignore linguist-vendored for `min.js`, `html` and `css` files:
 #
 ###############################################################################
-*.min.js linguist-vendored=false
-*.css    linguist-vendored=false
-*.html   linguist-vendored=false
+*.js linguist-vendored=false
+*.css linguist-vendored=false
+*.html linguist-vendored=false
 
 ###############################################################################
 # behavior for image files
